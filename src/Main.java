@@ -17,9 +17,8 @@ public class Main {
                 // print the text if we are on the correct row and our x value is less than the full length of the text
                 if (y == textRow - 1 && (x >= textOffset && x < text.length() + textOffset)) {
                     System.out.print(text.charAt(x - textOffset) + " ");
-
                 } else {
-                    System.out.print("X ");
+                    System.out.print("X ");                     // prints "X" to draw the shape
                 }
             }
             System.out.println();                               //Start next row
@@ -58,14 +57,19 @@ public class Main {
      **/
     private static void printDiamond(int height, String text) {
 
-        if(height%2 == 0) {
+        if (height % 2 == 0) {
             height++;
         }
-        int halfHeight = (height / 2) + (height % 2);
-              /*Get the row we should put the text on (can not be more than the height of the shape)*/
-        int textRow = getNextValidTextRowWithMax(text, height);
+        int halfHeight = (height / 2) + 1;
 
-        int textOffset = ((height - textRow - text.length()) / 2) + (height % 2);
+        /*Get the row we should put the text on
+        * the row for the text must be able to fit the entire text
+        * top half is the same as triangle
+        * bottom half is the complement of the top half*/
+        int textRow = getNextValidTextRowWithRange(text, text.length(), height-text.length() + 1);
+
+        int firstHalfTextOffset = (textRow - text.length()) / 2;
+        int secondHalfTextOffset = (height + 1 - textRow - text.length())/2;
 
 
         for (int y = 0; y < halfHeight; y++) {
@@ -73,9 +77,9 @@ public class Main {
             for (int space = halfHeight - y; space > 0; space--) {
                 System.out.print("  ");
             }
-            for (int x = 0; x < y; x++) {
-                if (y == textRow) {
-                    System.out.print(x + "   ");
+            for (int x = 1; x <= y; x++) {
+                if (y == textRow && x > firstHalfTextOffset && x <= (firstHalfTextOffset + text.length())) {
+                    System.out.print(text.charAt(x - firstHalfTextOffset - 1) + "   ");
                 } else {
                     System.out.print("X   ");
                 }
@@ -87,9 +91,9 @@ public class Main {
             for (int space = halfHeight - y; space > 0; space--) {
                 System.out.print("  ");
             }
-            for (int x = 0; x < y; x++) {
-                if ((height + 1) - y == textRow ) {
-                    System.out.print(x + "   ");
+            for (int x = 1; x <= y; x++) {
+                if ((height + 1) - y == textRow && x > secondHalfTextOffset && x < (secondHalfTextOffset + text.length())) {
+                    System.out.print(x - secondHalfTextOffset - 1 + "   ");
                 } else {
                     System.out.print("X   ");
                 }
@@ -257,7 +261,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        boolean buildANotherShape;
+        boolean buildAnotherShape;
         String nextShapeResponse;
         Scanner nextShapeScanner = new Scanner(System.in);
         Vector<String> shapeOptions = new Vector<>();
@@ -280,8 +284,8 @@ public class Main {
             System.out.print("\n\nDo you want to build another shape?");
             nextShapeResponse = nextShapeScanner.nextLine();
             ;
-            buildANotherShape = (Objects.equals(nextShapeResponse, "Yes") || Objects.equals(nextShapeResponse, "yes") || Objects.equals(nextShapeResponse, "y") || Objects.equals(nextShapeResponse, "Y"));
+            buildAnotherShape = (Objects.equals(nextShapeResponse, "Yes") || Objects.equals(nextShapeResponse, "yes") || Objects.equals(nextShapeResponse, "y") || Objects.equals(nextShapeResponse, "Y"));
 
-        } while (buildANotherShape);
+        } while (buildAnotherShape);
     }
 }
