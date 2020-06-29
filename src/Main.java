@@ -3,13 +3,46 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Main {
-    /**Prints out a square**/
-    private static void printSquare(int height, int textRow, String text) {
-        int textOffset = (height - text.length()) / 2;
+    /**
+     * Prints out a square
+     **/
+    private static void printSquare(int height, String text) {
+        /*Get the row we should put the text on (can not be more than the height of the shape)*/
+        int textRow = getNextValidTextRowWithMax(text, height);
+
+        int textOffset = (height - text.length()) / 2;          // The amount of "X" before the text to make sure it's in the middle of the space
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < height; x++) {
+                // print the text if we are on the correct row and our x value is less than the full length of the text
                 if (y == textRow - 1 && (x >= textOffset && x < text.length() + textOffset)) {
+                    System.out.print(text.charAt(x - textOffset) + " ");
+
+                } else {
+                    System.out.print("X ");
+                }
+            }
+            System.out.println();                               //Start next row
+        }
+    }
+
+    /**
+     * Prints out a triangle
+     **/
+    private static void printTriangle(int height, String text) {
+
+        //Get the row we should put the text on
+        //The number of available spots for the text is equal to the row number for a triangle
+        int textRow = getNextValidTextRowWithRange(text, text.length(), height);
+
+        int textOffset = (textRow - text.length()) / 2;
+        for (int y = 0; y <= height; y++) {
+
+            for (int space = height - y; space > 0; space--) {
+                System.out.print(" ");
+            }
+            for (int x = 0; x < y; x++) {
+                if (y == textRow && x - textOffset < text.length() && x >= textOffset && textOffset >= 0) {
                     System.out.print(text.charAt(x - textOffset) + " ");
 
                 } else {
@@ -18,40 +51,22 @@ public class Main {
             }
             System.out.println();
         }
-        System.out.println("\n\n\n");
     }
 
-    /**Prints out a triangle**/
-    private static void printTriangle(int height, int textRow, String text) {
-        int triangleTextRow = textRow;
+    /**
+     * Prints out a diamond
+     **/
+    private static void printDiamond(int height, String text) {
 
-        if (textRow < text.length()) {
-            System.out.print("\n** Error: Please Enter A Number LESS THAN " + text.length() + " **");
-            triangleTextRow = getNextValidTextRow(text, text.length());
+        if(height%2 == 0) {
+            height++;
         }
-
-
-        int textOffset = (triangleTextRow - text.length()) / 2;
-        for (int y = 0; y <= height; y++) {
-
-            for (int space = height - y; space > 0; space--) {
-                System.out.print(" ");
-            }
-            for (int x = 0; x < y; x++) {
-                if (y == triangleTextRow && x-textOffset < text.length() && x >= textOffset && textOffset >= 0) {
-                    System.out.print(text.charAt(x-textOffset) + " ");
-
-                } else {
-                    System.out.print("X ");
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    /**Prints out a diamond**/
-    private static void printDiamond(int height, int textRow, String text) {
         int halfHeight = (height / 2) + (height % 2);
+              /*Get the row we should put the text on (can not be more than the height of the shape)*/
+        int textRow = getNextValidTextRowWithMax(text, height);
+
+        int textOffset = ((height - textRow - text.length()) / 2) + (height % 2);
+
 
         for (int y = 0; y < halfHeight; y++) {
 
@@ -59,7 +74,11 @@ public class Main {
                 System.out.print("  ");
             }
             for (int x = 0; x < y; x++) {
-                System.out.print("X   ");
+                if (y == textRow) {
+                    System.out.print(x + "   ");
+                } else {
+                    System.out.print("X   ");
+                }
             }
             System.out.println();
         }
@@ -69,14 +88,23 @@ public class Main {
                 System.out.print("  ");
             }
             for (int x = 0; x < y; x++) {
-                System.out.print("X   ");
+                if ((height + 1) - y == textRow ) {
+                    System.out.print(x + "   ");
+                } else {
+                    System.out.print("X   ");
+                }
             }
             System.out.println();
         }
     }
 
-    /**Prints out a square**/
-    private static void printRectangle(int height, int textRow, String text) {
+    /**
+     * Prints out a square
+     **/
+    private static void printRectangle(int height, String text) {
+              /*Get the row we should put the text on (can not be more than the height of the shape)*/
+        int textRow = getNextValidTextRowWithMax(text, height);
+
         int textOffset = (height * 2 - text.length()) / 2;
 
         for (int y = 0; y < height; y++) {
@@ -93,9 +121,11 @@ public class Main {
         System.out.println("\n\n\n");
     }
 
-    /**returns the user input int after being validated
+    /**
+     * returns the user input int after being validated
      * makes sure integer is positive and not a string
-     * will continue to prompt user until a valid integer is entered. **/
+     * will continue to prompt user until a valid integer is entered.
+     **/
     private static int getNextValidInt(String messagePrompt) {
         boolean validInput;
         Scanner validNumScanner = new Scanner(System.in);
@@ -124,9 +154,11 @@ public class Main {
         return validNum;
     }
 
-    /**returns the user input String after being validated
-     * determines whether empty input which will default to "LU". **/
-    private static String getNextValidShapeText(String shapeType){
+    /**
+     * returns the user input String after being validated
+     * determines whether empty input which will default to "LU".
+     **/
+    private static String getNextValidShapeText(String shapeType) {
         String validShapeText;
         Scanner validShapeTextScanner = new Scanner(System.in);
         System.out.print("\nWhat label should I print on this " + shapeType + " (Leave Blank for \"LU\")?");
@@ -138,25 +170,49 @@ public class Main {
         return validShapeText;
     }
 
-    /**returns the user input int after being validated
-     * determines whether empty input which will default to "LU". */
-    private static int getNextValidTextRow(String shapeText, int maxNum){
+    /**
+     * returns the user input int after being validated
+     * determines whether empty input which will default to "LU".
+     */
+    private static int getNextValidTextRowWithMax(String shapeText, int maxNum) {
         int validShapeTextRow;
 
+        //we continue to ask the user for a number less than the maxNum
         do {
-            validShapeTextRow = getNextValidInt("\nWhat row should I print " + shapeText + "\": ");
-
+            validShapeTextRow = getNextValidInt("\nWhat row should I print \"" + shapeText + "\": ");
+            if (maxNum < shapeText.length()) {
+                System.out.println("HEY HEY HEY");
+            }
             if (validShapeTextRow > maxNum) {
-                System.out.print("\n** Error: please Enter A number LESS THAN " + maxNum + "! **");
+                System.out.print("\n** Error: please Enter A number LESS THAN " + (maxNum + 1) + "! **");
             }
         } while (validShapeTextRow > maxNum);
         return validShapeTextRow;
     }
 
-    private static void shapeBuilder(Vector <String> shapeOptions) {
+    private static int getNextValidTextRowWithRange(String shapeText, int minNum, int maxNum) {
+        int validShapeTextRow;
+
+        //we continue to ask the user for a number more than the minNum
+        do {
+            validShapeTextRow = getNextValidInt("\nWhat row should I print " + shapeText + "\": ");
+            if (minNum > maxNum) {
+                System.out.println("HEY HEY HEY HEY");
+            }
+            if (validShapeTextRow < minNum) {
+                System.out.print("\n** Error: please Enter A number MORE THAN " + (minNum - 1) + "! **");
+            } else if (validShapeTextRow > maxNum) {
+                System.out.print("\n** Error: please Enter A number LESS THAN " + (maxNum + 1) + "! **");
+            }
+
+        } while (validShapeTextRow < minNum || validShapeTextRow > maxNum);
+        return validShapeTextRow;
+    }
+
+    private static void shapeBuilder(Vector<String> shapeOptions) {
         Scanner shapeBuilderInput = new Scanner(System.in);
         String shapeType, shapeText;
-        int shapeHeight, shapeTextRow;
+        int shapeHeight;
 
          /*Get the type of shape we should draw*/
         do {
@@ -175,28 +231,26 @@ public class Main {
         /*Get the text label we should print on the shape*/
         shapeText = getNextValidShapeText(shapeType);
 
-        /*Get the row we should put the text on (can not be more than the height of the shape)*/
-        shapeTextRow = getNextValidTextRow(shapeText, shapeHeight);
 
         switch (shapeType) {
             case "Square":
             case "square":
-                printSquare(shapeHeight, shapeTextRow, shapeText);
+                printSquare(shapeHeight, shapeText);
                 break;
             case "Rectangle":
             case "rectangle":
-                printRectangle(shapeHeight, shapeTextRow, shapeText);
+                printRectangle(shapeHeight, shapeText);
                 break;
             case "Diamond":
             case "diamond":
-                printDiamond(shapeHeight, shapeTextRow, shapeText);
+                printDiamond(shapeHeight, shapeText);
                 break;
             case "Triangle":
             case "triangle":
-                printTriangle(shapeHeight, shapeTextRow, shapeText);
+                printTriangle(shapeHeight, shapeText);
                 break;
             default:
-                printSquare(shapeHeight, shapeTextRow, shapeText);
+                printSquare(shapeHeight, shapeText);
         }
     }
 
@@ -224,9 +278,10 @@ public class Main {
             shapeBuilder(shapeOptions);
 
             System.out.print("\n\nDo you want to build another shape?");
-            nextShapeResponse = nextShapeScanner.nextLine();;
+            nextShapeResponse = nextShapeScanner.nextLine();
+            ;
             buildANotherShape = (Objects.equals(nextShapeResponse, "Yes") || Objects.equals(nextShapeResponse, "yes") || Objects.equals(nextShapeResponse, "y") || Objects.equals(nextShapeResponse, "Y"));
 
-        } while(buildANotherShape);
+        } while (buildANotherShape);
     }
 }
