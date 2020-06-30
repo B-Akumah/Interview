@@ -88,7 +88,7 @@ public class Main {
          * the offset numbers are different for the top and bottom half due to the bottom half counting downwards
          */
         int firstHalfTextOffset = (textRow - text.length()) / 2;
-        int secondHalfTextOffset = (height + 1 - textRow - text.length()) / 2;
+        int secondHalfTextOffset = ((height + 1 - textRow - text.length()) / 2) + ((height + 1 - textRow - text.length()) % 2);
 
         //Top Triangle
         for (int y = 0; y < halfHeight; y++) {
@@ -114,8 +114,8 @@ public class Main {
             }
             for (int x = 1; x <= y; x++) {
                 // print the text if we are on the correct row and on the bottom half
-                if ((height + 1) - y == textRow && x > secondHalfTextOffset && x < (secondHalfTextOffset + text.length())) {
-                    System.out.print(x - secondHalfTextOffset - 1 + "   ");
+                if ((height + 1) - y == textRow && x > secondHalfTextOffset && x <= (secondHalfTextOffset + text.length())) {
+                    System.out.print(text.charAt(x - secondHalfTextOffset - 1) + "   ");
                 } else {
                     System.out.print("X   ");           // prints "X" to draw the bottom triangle
                 }
@@ -223,6 +223,9 @@ public class Main {
         return validShapeTextRow;
     }
 
+    /**
+     * returns the user input if it is within the range of minNum and maxNum
+     */
     private static int getNextValidTextRowWithRange(String shapeText, int minNum, int maxNum) {
         int validShapeTextRow;
 
@@ -241,6 +244,9 @@ public class Main {
         return validShapeTextRow;
     }
 
+    /**
+     * asks the user a yes/no questions until a variation of "YES" or "NO" is inputed
+     */
     private static boolean getYesOrNo(String prompt) {
         Scanner boolScanner = new Scanner(System.in);
         boolean validBool = false, toRepeat;
@@ -269,7 +275,7 @@ public class Main {
             }
             //user did not enter yes or no variation and re ask for correct input
             else {
-                System.out.print("**Error: Please enter Yes or No** ");
+                System.out.print("\n\n**Error: Please enter Yes or No** ");
                 toRepeat = true;
             }
         } while (toRepeat);
@@ -277,6 +283,9 @@ public class Main {
         return validBool;       //return true(YES) or false(NO)
     }
 
+    /**
+     * driver function that calls all other function and sequentially creates shape
+     */
     private static void shapeBuilder(Vector<String> shapeOptions) {
         Scanner shapeBuilderInput = new Scanner(System.in);
         String shapeType, shapeText;
@@ -300,7 +309,7 @@ public class Main {
         shapeText = getNextValidShapeText(shapeType);
 
 
-        //Determine what shapr function to call and pass it needed parameters
+        //Determine what shape function to call and pass it needed parameters
         switch (shapeType) {
             case "Square":
             case "square":
@@ -323,7 +332,9 @@ public class Main {
         }
     }
 
-
+    /**
+     * main function
+     */
     public static void main(String[] args) {
 
         boolean buildAnotherShape;
@@ -346,8 +357,8 @@ public class Main {
         do {
             //starts shape builder
             shapeBuilder(shapeOptions);
-
-            buildAnotherShape = getYesOrNo("\n\nDo you want to build another shape?");
+            System.out.println("\n\n");
+            buildAnotherShape = getYesOrNo("\nDo you want to build another shape?");
 
         } while (buildAnotherShape);
     }
