@@ -1,10 +1,14 @@
 # Interview
 In order for us to get a better grasp on your programming abilities, please perform the two tasks below.  They’re fairly simple, but they allow me to get a glimpse of how you solve problems and implement solutions.  Feel free to add additional features.  “Scope creep” is encouraged if it enables you to better highlight your coding proficiency.  Have fun with this, and show us what you can do.
 1.	Write a simple Java or C# program that draws ASCII shapes
+
 a.	It should take at least these inputs, but it could take more.  It should be almost impossible to crash the program through bad input.
+
 i.	Which shape to draw – the choices should include triangle, square, and diamond.
+
 ii.	Height of the shape
-iii.	Text label to display
+
+   iii.	Text label to display
 1.	Choosing the label should be optional for the user.
 2.	Default: “LU”
 iv.	Row on which to display text label
