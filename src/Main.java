@@ -1,6 +1,9 @@
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Vector;
+import Shapes.Shape;
+import Shapes.Square;
+import Shapes.Triangle;
 
 public class Main {
     /**
@@ -297,13 +300,13 @@ public class Main {
             shapeType = shapeBuilderInput.nextLine();
 
             if (!shapeOptions.contains(shapeType)) {
-                System.out.print("\n** Error: please Enter A VALID Shape **");
+                System.out.print("\n** Error: please Enter A VALID Shapes **");
             }
 
         } while (!shapeOptions.contains(shapeType));
 
         /*Get the Height of the shape we should draw*/
-        shapeHeight = getNextValidInt("\nEnter the HEIGHT of the Shape: ");
+        shapeHeight = getNextValidInt("\nEnter the HEIGHT of the Shapes: ");
 
         /*Get the text label we should print on the shape*/
         shapeText = getNextValidShapeText(shapeType);
@@ -337,6 +340,10 @@ public class Main {
      */
     public static void main(String[] args) {
 
+
+        Shape myShape = new Square(10, 10, "ball");
+        myShape.print();
+
         boolean buildAnotherShape;
         //Initialize the types of shapes we can draw and has Caps variations
         Vector<String> shapeOptions = new Vector<>();
@@ -350,7 +357,7 @@ public class Main {
         shapeOptions.add("rectangle");
 
         //Welcome Message
-        System.out.println("***Welcome to Shape Builder***");
+        System.out.println("***Welcome to Shapes Builder***");
         System.out.println("\n * * * * SHAPE CHOICES: Diamond, Square, Rectangle, Triangle * * * *");
 
         //Continue to build new shapes while the user chooses to do so
