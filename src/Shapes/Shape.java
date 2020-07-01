@@ -1,20 +1,19 @@
 package Shapes;
 
+import java.util.Objects;
 import java.util.Scanner;
-
-/**
- * Created by brianschool on 7/1/20.
- */
 
 public class Shape {
     protected int height, row;
     protected String text;
+    protected int textOffset;
 
+    public Shape(String shapeType) {
+         /*Get the Height of the shape we should draw*/
+       setHeight(getNextValidInt("\nEnter the HEIGHT of the Shapes: "));
 
-    public Shape(int heightIn, int rowIn, String textIn) {
-        setHeight(heightIn);
-        setRow(rowIn);
-        setText(textIn);
+        /*Get the text label we should print on the shape*/
+        setText(getNextValidShapeText(shapeType));
     }
 
     public int getHeight() {
@@ -26,16 +25,23 @@ public class Shape {
     public String getText() {
         return text;
     }
+    public int getTextOffset() {
+        return textOffset;
+    }
 
     private void setHeight(int height) {
         this.height = height;
     }
-    private void setRow(int row) {
-        this.row = row;
-    }
     private void setText(String text) {
         this.text = text;
     }
+    protected void setRow(int row) {
+        this.row = row;
+    }
+    protected void setTextOffset(int textOffset) {
+        this.textOffset = textOffset;
+    }
+
 
     public void print() {
         System.out.println("Shape");
@@ -115,6 +121,24 @@ public class Shape {
 
         } while (validShapeTextRow < minNum || validShapeTextRow > maxNum);
         return validShapeTextRow;
+    }
+
+    /**
+     * returns the user input String after being validated
+     * determines whether empty input which will default to "LU".
+     **/
+    private String getNextValidShapeText(String shapeType) {
+        String validShapeText;
+        Scanner validShapeTextScanner = new Scanner(System.in);
+
+        System.out.print("\nWhat label should I print on this " + shapeType + " (Leave Blank for \"LU\")?");
+        validShapeText = validShapeTextScanner.nextLine();
+
+        //If the user does not enter any text defaults to "LU"
+        if (Objects.equals(validShapeText, "")) {
+            validShapeText = "LU";
+        }
+        return validShapeText;
     }
 
 }
