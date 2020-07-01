@@ -7,7 +7,7 @@ public class Main {
      * Prints out a square
      **/
     private static void printSquare(int height, String text) {
-        /*Get the row we should put the text on (can not be more than the height of the shape)*/
+        /*Get the row we should put the text on (can not be more than the height which is also the width of the shape)*/
         int textRow = getNextValidTextRowWithMax(text, height);
 
         // The amount of "X" before the text to make sure it's in the middle of the space
@@ -45,7 +45,7 @@ public class Main {
                 System.out.print(" ");
             }
             for (int x = 0; x < y; x++) {
-                // print the text if we are on the correct row and our x value is less than the full length of the text
+                // print the text if we are on the correct row and our x value is less than the full length of the text so we don't overflow
                 if (y == textRow && x - textOffset < text.length() && x >= textOffset && textOffset >= 0) {
                     System.out.print(text.charAt(x - textOffset) + " ");
 
@@ -65,7 +65,7 @@ public class Main {
 
         /*
         * Diamonds can only have an Odd number of rows
-        * if an even number is selected it will go to the next odd numbe
+        * if an even number is selected it will go to the next odd number
         * r*/
         if (height % 2 == 0) {
             height++;
@@ -128,7 +128,7 @@ public class Main {
      * Prints out a rectangle
      **/
     private static void printRectangle(int height, String text) {
-        //Get the row we should put the text on
+        //Get the row we should put the text
         int textRow = getNextValidTextRowWithMax(text, height);
 
         //Offset that allows text to be centered
